@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trustboundary"
+version = "2.2.0"
+authors = [
+  { name="Aravind Yuvaraj", email="aravindyuvaraj007@gmail.com" },
+]
+description = "A zero-dependency prompt injection defense and tool guardrail for AI agents."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/AravindYuvraj/trustboundary"
+Issues = "https://github.com/AravindYuvraj/trustboundary/issues"
+
+[tool.setuptools]
+py-modules = ["trustboundary"]

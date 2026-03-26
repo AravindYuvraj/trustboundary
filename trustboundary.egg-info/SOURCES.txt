@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+trustboundary.py
+trustboundary.egg-info/PKG-INFO
+trustboundary.egg-info/SOURCES.txt
+trustboundary.egg-info/dependency_links.txt
+trustboundary.egg-info/top_level.txt
