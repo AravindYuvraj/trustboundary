@@ -151,6 +151,52 @@ def make_tb():
     )
 ```
 
+## Contributing
+
+TrustBoundary is open source and open to everyone. If you see a flaw, a missing edge case, or a better way to do something — open an issue or send a PR. The best ideas so far have come from people poking holes in the design.
+
+**Ways to contribute:**
+
+- **Break it.** Try to bypass taint tracking, evade the scanner, or smuggle delimiters. If you find a way through, that's a valuable contribution. Open an issue with your attack and we'll fix it together.
+- **Add scanner patterns.** The regex detector is intentionally basic. If you know injection patterns in other languages, novel jailbreak techniques, or encoding tricks that bypass it — add them.
+- **Framework integrations.** We have examples for LangChain. We need tested examples for CrewAI, AutoGen, LlamaIndex, Haystack, Semantic Kernel, and others.
+- **Improve the taint model.** The current CLEAN → LOW → HIGH → CRITICAL model works but it's simple. If you have ideas for more granular trust levels, per-tool taint scoping, or smarter permission degradation — let's discuss.
+- **Add async support.** Production agents are async. We need `aguard()`, async callbacks, and async-safe session management.
+- **Write tests.** Especially adversarial ones. The best test is one that currently passes but shouldn't.
+
+**How to contribute:**
+
+1. Fork the repo
+2. Create a branch (`git checkout -b fix/delimiter-smuggling-bypass`)
+3. Make your changes to `trustboundary.py` (it's one file)
+4. Add a test to `test_trustboundary.py`
+5. Run `python test_trustboundary.py` — all tests must pass
+6. Open a PR with a clear description of what you changed and why
+
+No contribution is too small. Typo fixes, better docstrings, clearer error messages — all welcome.
+
+## Known Limitations (Help Wanted)
+
+These are real weaknesses. If you can solve any of them, you'll make every AI agent in production safer.
+
+**Regex detection is a losing arms race.** The scanner catches common patterns but will always miss novel attacks. Foreign languages, adversarial suffixes, and creative obfuscation bypass it easily. The taint system covers for this, but a better detector (ML-based, fine-tuned classifier, or integration with tools like Llama Guard) would strengthen the first layer significantly.
+
+**No multimodal support.** Attackers can hide instructions in images, audio, and PDFs that get processed by multimodal LLMs. TrustBoundary currently only scans text. Multimodal taint tracking is an open problem.
+
+**Taint is binary per session.** Once tainted, the whole session is read-only. This is secure but restrictive. A more sophisticated system might allow per-tool taint scoping — "this RAG document taints email tools but not database reads" — without opening bypass vectors. Hard problem. Ideas welcome.
+
+**No distributed session support.** TrustBoundary state lives in memory. For horizontally scaled apps (multiple workers behind a load balancer), you'd need shared state via Redis or similar. Not implemented yet.
+
+**The prompt structure is still just text.** Randomized delimiters and smuggling detection help, but fundamentally we're still asking the LLM nicely to respect boundaries. Until model providers offer native trust-level APIs, this remains a mitigation, not a guarantee. The taint system is the real guarantee.
+
+## Community
+
+This project started from a simple observation: every entry in the [OWASP Top 10 for Agentic AI](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) traces back to one root cause. LLMs treat all text as equally trustworthy. The industry is building increasingly powerful agents on top of this broken foundation.
+
+TrustBoundary doesn't fix LLMs. It wraps them in a deterministic trust layer that enforces what the model cannot enforce on its own. It's a small library with a specific job. If it prevents even one unauthorized wire transfer, one data exfiltration, or one forwarded email — it was worth building.
+
+Star the repo if you find it useful. Share it with someone building agents. And if you find a way to break it, please tell us before telling Twitter.
+
 ## License
 
 MIT
